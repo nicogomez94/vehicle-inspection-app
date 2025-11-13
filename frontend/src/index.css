@@ -279,7 +279,7 @@ body {
   max-width: 600px;
   height: 300px;
   cursor: crosshair;
-  background: rgba(0, 20, 0, 0.5);
+  background: white;
 }
 
 .signature-actions {
