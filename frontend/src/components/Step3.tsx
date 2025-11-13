@@ -13,6 +13,7 @@ const Step3: React.FC<Step3Props> = ({ data, onFinish, onBack, isSubmitting }) =
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isDrawing, setIsDrawing] = useState(false);
   const [hasSignature, setHasSignature] = useState(!!data.signature);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -33,9 +34,22 @@ const Step3: React.FC<Step3Props> = ({ data, onFinish, onBack, isSubmitting }) =
       };
       img.src = data.signature;
     }
-  }, [data.signature]);
+  }, [data.signature, showModal]);
+
+  useEffect(() => {
+    // Prevent body scroll when modal is open
+    if (showModal) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [showModal]);
 
   const startDrawing = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
+    e.preventDefault(); // Prevent scrolling on touch devices
     const canvas = canvasRef.current;
     if (!canvas) return;
 
@@ -52,6 +66,7 @@ const Step3: React.FC<Step3Props> = ({ data, onFinish, onBack, isSubmitting }) =
   };
 
   const draw = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
+    e.preventDefault(); // Prevent scrolling on touch devices
     if (!isDrawing) return;
 
     const canvas = canvasRef.current;
@@ -99,6 +114,10 @@ const Step3: React.FC<Step3Props> = ({ data, onFinish, onBack, isSubmitting }) =
     onFinish({ signature: signatureData });
   };
 
+  const saveSignature = () => {
+    setShowModal(false);
+  };
+
   return (
     <form onSubmit={handleSubmit}>
       <h2 style={{ marginBottom: '30px', color: '#333' }}>Paso 3: Firma del Cliente</h2>
@@ -109,25 +128,67 @@ const Step3: React.FC<Step3Props> = ({ data, onFinish, onBack, isSubmitting }) =
           <span className="required">*</span>
         </label>
         <p style={{ color: '#666', fontSize: '14px', marginBottom: '15px' }}>
-          Dibuje su firma en el área a continuación
+          {hasSignature ? 'Firma capturada. Click para editar.' : 'Click para abrir el panel de firma'}
         </p>
-        <canvas
-          ref={canvasRef}
-          className="signature-canvas"
-          onMouseDown={startDrawing}
-          onMouseMove={draw}
-          onMouseUp={stopDrawing}
-          onMouseLeave={stopDrawing}
-          onTouchStart={startDrawing}
-          onTouchMove={draw}
-          onTouchEnd={stopDrawing}
-        />
-        <div className="signature-actions">
-          <button type="button" className="btn-clear" onClick={clearSignature}>
-            Limpiar
-          </button>
-        </div>
+        
+        {hasSignature && (
+          <div className="signature-preview" onClick={() => setShowModal(true)}>
+            <img src={data.signature} alt="Firma" />
+          </div>
+        )}
+        
+        <button 
+          type="button" 
+          className="btn btn-primary"
+          onClick={() => setShowModal(true)}
+          style={{ marginTop: hasSignature ? '10px' : '0' }}
+        >
+          {hasSignature ? 'Editar Firma' : 'Abrir Panel de Firma'}
+        </button>
       </div>
+
+      {showModal && (
+        <div className="signature-modal-overlay" onClick={() => setShowModal(false)}>
+          <div className="signature-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="signature-modal-header">
+              <h3>Dibuje su firma</h3>
+              <button 
+                type="button" 
+                className="modal-close-btn"
+                onClick={() => setShowModal(false)}
+              >
+                ✕
+              </button>
+            </div>
+            <div className="signature-modal-body">
+              <canvas
+                ref={canvasRef}
+                className="signature-canvas"
+                onMouseDown={startDrawing}
+                onMouseMove={draw}
+                onMouseUp={stopDrawing}
+                onMouseLeave={stopDrawing}
+                onTouchStart={startDrawing}
+                onTouchMove={draw}
+                onTouchEnd={stopDrawing}
+              />
+            </div>
+            <div className="signature-modal-footer">
+              <button type="button" className="btn-clear" onClick={clearSignature}>
+                Limpiar
+              </button>
+              <button 
+                type="button" 
+                className="btn btn-success" 
+                onClick={saveSignature}
+                disabled={!hasSignature}
+              >
+                Guardar Firma
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="button-group">
         <button type="button" className="btn btn-secondary" onClick={onBack} disabled={isSubmitting}>

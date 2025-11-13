@@ -270,6 +270,138 @@ body {
   background: #d32f2f;
 }
 
+/* Signature Modal Styles */
+.signature-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.signature-modal {
+  background: white;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 700px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+.signature-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.signature-modal-header h3 {
+  margin: 0;
+  font-size: 20px;
+  color: #333;
+}
+
+.modal-close-btn {
+  background: none;
+  border: none;
+  font-size: 28px;
+  color: #666;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: background 0.3s;
+}
+
+.modal-close-btn:hover {
+  background: #f0f0f0;
+}
+
+.signature-modal-body {
+  padding: 20px;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.signature-modal-body .signature-canvas {
+  width: 100%;
+  height: 100%;
+  max-height: 400px;
+  touch-action: none; /* Prevent scroll and zoom on touch devices */
+}
+
+.signature-modal-footer {
+  display: flex;
+  gap: 10px;
+  padding: 20px;
+  border-top: 1px solid #e0e0e0;
+  justify-content: flex-end;
+}
+
+.signature-preview {
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 10px;
+  background: white;
+  cursor: pointer;
+  transition: border-color 0.3s;
+}
+
+.signature-preview:hover {
+  border-color: #1976d2;
+}
+
+.signature-preview img {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+  display: block;
+}
+
+/* Mobile optimizations for signature modal */
+@media (max-width: 768px) {
+  .signature-modal {
+    max-width: 100%;
+    max-height: 100vh;
+    border-radius: 0;
+    height: 100%;
+  }
+
+  .signature-modal-body {
+    padding: 10px;
+  }
+
+  .signature-modal-body .signature-canvas {
+    max-height: none;
+    height: 100%;
+  }
+
+  .signature-modal-footer {
+    flex-wrap: wrap;
+  }
+
+  .signature-modal-footer button {
+    flex: 1;
+    min-width: 120px;
+  }
+}
+
 .success-message {
   background: #4CAF50;
   color: white;
