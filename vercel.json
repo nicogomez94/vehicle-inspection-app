@@ -16,14 +16,8 @@
       }
     }
   ],
-  "rewrites": [
-    {
-      "source": "/api/:match*",
-      "destination": "/backend/api/index.ts"
-    },
-    {
-      "source": "/(.*)",
-      "destination": "/frontend/dist/$1"
-    }
+  "routes": [
+    { "src": "/api/(.*)", "dest": "/backend/api/index.ts" },
+    { "src": "/(.*)", "dest": "/frontend/dist/$1" }
   ]
 }

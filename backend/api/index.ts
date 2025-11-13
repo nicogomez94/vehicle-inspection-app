@@ -12,11 +12,11 @@ app.use(cors());
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
-// Routes - mount under /api to match frontend calls
-app.use('/api', inspeccionesRouter);
+// Routes - support both /api/* and /* to be robust with Vercel routing
+app.use(['/api', '/'], inspeccionesRouter);
 
-// Health check
-app.get('/api/health', (req: Request, res: Response) => {
+// Health check (both paths)
+app.get(['/api/health', '/health'], (req: Request, res: Response) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
