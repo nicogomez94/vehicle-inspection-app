@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { inspeccionesApi, GetAllParams } from '../api/inspecciones';
 import { InspeccionResponse } from '../types/inspeccion';
 import '../styles/Admin.css';
