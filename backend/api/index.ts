@@ -12,11 +12,11 @@ app.use(cors());
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
-// Routes - No need to prefix with /api since vercel.json rewrites /api/* to this file
-app.use('/', inspeccionesRouter);
+// Routes - mount under /api to match frontend calls
+app.use('/api', inspeccionesRouter);
 
 // Health check
-app.get('/health', (req: Request, res: Response) => {
+app.get('/api/health', (req: Request, res: Response) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
