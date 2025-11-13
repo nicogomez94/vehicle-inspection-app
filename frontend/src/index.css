@@ -10,7 +10,8 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: #f5f5f5;
+  background: linear-gradient(135deg, #0a1f0a 0%, #001a00 100%);
+  color: #e0e0e0;
 }
 
 #root {
@@ -27,17 +28,19 @@ body {
 }
 
 .wizard-header {
-  background: white;
+  background: rgba(0, 20, 0, 0.8);
   padding: 30px;
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 20px rgba(0, 255, 0, 0.1);
   margin-bottom: 30px;
+  border: 1px solid rgba(0, 255, 0, 0.2);
 }
 
 .wizard-header h1 {
-  color: #333;
+  color: #00ff00;
   margin-bottom: 10px;
   font-size: 28px;
+  text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
 }
 
 .step-indicator {
@@ -50,25 +53,28 @@ body {
 .step {
   flex: 1;
   height: 4px;
-  background: #e0e0e0;
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 2px;
   position: relative;
 }
 
 .step.active {
-  background: #2196F3;
+  background: #00ff00;
+  box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
 }
 
 .step.completed {
-  background: #4CAF50;
+  background: #00cc00;
+  box-shadow: 0 0 10px rgba(0, 204, 0, 0.5);
 }
 
 .wizard-content {
-  background: white;
+  background: rgba(0, 30, 0, 0.8);
   padding: 40px;
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 20px rgba(0, 255, 0, 0.1);
   flex: 1;
+  border: 1px solid rgba(0, 255, 0, 0.2);
 }
 
 .form-group {
@@ -79,7 +85,7 @@ body {
   display: block;
   margin-bottom: 8px;
   font-weight: 600;
-  color: #333;
+  color: #00ff00;
   font-size: 14px;
 }
 
@@ -87,16 +93,25 @@ body {
 .form-group textarea {
   width: 100%;
   padding: 12px 16px;
-  border: 2px solid #e0e0e0;
+  border: 2px solid rgba(0, 255, 0, 0.3);
   border-radius: 8px;
   font-size: 16px;
-  transition: border-color 0.3s;
+  transition: all 0.3s;
+  background: rgba(0, 20, 0, 0.6);
+  color: #e0e0e0;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: rgba(0, 255, 0, 0.4);
 }
 
 .form-group input:focus,
 .form-group textarea:focus {
   outline: none;
-  border-color: #2196F3;
+  border-color: #00ff00;
+  box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+  background: rgba(0, 30, 0, 0.8);
 }
 
 .form-group textarea {
@@ -105,8 +120,13 @@ body {
   font-family: inherit;
 }
 
+.form-group p,
+.signature-pad-container p {
+  color: rgba(0, 255, 0, 0.7);
+}
+
 .required {
-  color: #f44336;
+  color: #ff0000;
   margin-left: 4px;
 }
 
@@ -115,7 +135,7 @@ body {
   gap: 15px;
   margin-top: 40px;
   padding-top: 30px;
-  border-top: 1px solid #e0e0e0;
+  border-top: 1px solid rgba(0, 255, 0, 0.2);
 }
 
 .btn {
@@ -126,6 +146,8 @@ body {
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .btn:disabled {
@@ -134,32 +156,38 @@ body {
 }
 
 .btn-primary {
-  background: #2196F3;
-  color: white;
+  background: #00ff00;
+  color: #001a00;
   flex: 1;
+  box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: #1976D2;
+  background: #00cc00;
+  box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
 }
 
 .btn-secondary {
-  background: #f5f5f5;
-  color: #333;
+  background: rgba(0, 30, 0, 0.8);
+  color: #00ff00;
+  border: 2px solid rgba(0, 255, 0, 0.3);
 }
 
 .btn-secondary:hover {
-  background: #e0e0e0;
+  background: rgba(0, 40, 0, 0.9);
+  border-color: #00ff00;
 }
 
 .btn-success {
-  background: #4CAF50;
-  color: white;
+  background: #00ff00;
+  color: #001a00;
   flex: 1;
+  box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
 }
 
 .btn-success:hover:not(:disabled) {
-  background: #45a049;
+  background: #00cc00;
+  box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
 }
 
 .photo-upload {
@@ -175,18 +203,21 @@ body {
   align-items: center;
   gap: 10px;
   padding: 12px 24px;
-  background: #2196F3;
-  color: white;
+  background: #00ff00;
+  color: #001a00;
   border: none;
   border-radius: 8px;
   font-size: 16px;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.3s;
+  transition: all 0.3s;
+  box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
+  text-transform: uppercase;
 }
 
 .photo-upload-btn:hover {
-  background: #1976D2;
+  background: #00cc00;
+  box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
 }
 
 .photo-preview-grid {
@@ -201,7 +232,8 @@ body {
   aspect-ratio: 1;
   border-radius: 8px;
   overflow: hidden;
-  border: 2px solid #e0e0e0;
+  border: 2px solid rgba(0, 255, 0, 0.3);
+  box-shadow: 0 0 10px rgba(0, 255, 0, 0.1);
 }
 
 .photo-preview-item img {
@@ -214,7 +246,7 @@ body {
   position: absolute;
   top: 8px;
   right: 8px;
-  background: rgba(244, 67, 54, 0.9);
+  background: rgba(255, 0, 0, 0.8);
   color: white;
   border: none;
   border-radius: 50%;
@@ -226,11 +258,13 @@ body {
   cursor: pointer;
   font-size: 18px;
   line-height: 1;
-  transition: background 0.3s;
+  transition: all 0.3s;
+  box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
 }
 
 .photo-remove-btn:hover {
-  background: rgba(244, 67, 54, 1);
+  background: rgba(255, 0, 0, 1);
+  box-shadow: 0 0 15px rgba(255, 0, 0, 0.8);
 }
 
 .signature-pad-container {
@@ -238,14 +272,14 @@ body {
 }
 
 .signature-canvas {
-  border: 2px solid #e0e0e0;
+  border: 2px solid rgba(0, 255, 0, 0.3);
   border-radius: 8px;
   display: block;
   width: 100%;
   max-width: 600px;
   height: 300px;
   cursor: crosshair;
-  background: white;
+  background: rgba(0, 20, 0, 0.5);
 }
 
 .signature-actions {
@@ -256,18 +290,21 @@ body {
 
 .btn-clear {
   padding: 10px 20px;
-  background: #f44336;
+  background: rgba(255, 0, 0, 0.8);
   color: white;
   border: none;
   border-radius: 8px;
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.3s;
+  transition: all 0.3s;
+  text-transform: uppercase;
+  box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
 }
 
 .btn-clear:hover {
-  background: #d32f2f;
+  background: rgba(255, 0, 0, 1);
+  box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
 }
 
 /* Signature Modal Styles */
@@ -277,7 +314,7 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.9);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -286,14 +323,15 @@ body {
 }
 
 .signature-modal {
-  background: white;
+  background: rgba(0, 30, 0, 0.95);
   border-radius: 12px;
   width: 100%;
   max-width: 700px;
   max-height: 90vh;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 10px 40px rgba(0, 255, 0, 0.3);
+  border: 2px solid rgba(0, 255, 0, 0.3);
 }
 
 .signature-modal-header {
@@ -301,20 +339,21 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 20px;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid rgba(0, 255, 0, 0.2);
 }
 
 .signature-modal-header h3 {
   margin: 0;
   font-size: 20px;
-  color: #333;
+  color: #00ff00;
+  text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
 }
 
 .modal-close-btn {
   background: none;
   border: none;
   font-size: 28px;
-  color: #666;
+  color: #00ff00;
   cursor: pointer;
   padding: 0;
   width: 32px;
@@ -323,11 +362,12 @@ body {
   align-items: center;
   justify-content: center;
   border-radius: 4px;
-  transition: background 0.3s;
+  transition: all 0.3s;
 }
 
 .modal-close-btn:hover {
-  background: #f0f0f0;
+  background: rgba(0, 255, 0, 0.2);
+  box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
 }
 
 .signature-modal-body {
@@ -350,21 +390,22 @@ body {
   display: flex;
   gap: 10px;
   padding: 20px;
-  border-top: 1px solid #e0e0e0;
+  border-top: 1px solid rgba(0, 255, 0, 0.2);
   justify-content: flex-end;
 }
 
 .signature-preview {
-  border: 2px solid #e0e0e0;
+  border: 2px solid rgba(0, 255, 0, 0.3);
   border-radius: 8px;
   padding: 10px;
-  background: white;
+  background: rgba(0, 20, 0, 0.5);
   cursor: pointer;
-  transition: border-color 0.3s;
+  transition: all 0.3s;
 }
 
 .signature-preview:hover {
-  border-color: #1976d2;
+  border-color: #00ff00;
+  box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
 }
 
 .signature-preview img {
@@ -403,16 +444,19 @@ body {
 }
 
 .success-message {
-  background: #4CAF50;
-  color: white;
+  background: rgba(0, 50, 0, 0.9);
+  color: #00ff00;
   padding: 40px;
   border-radius: 12px;
   text-align: center;
+  border: 2px solid rgba(0, 255, 0, 0.5);
+  box-shadow: 0 0 30px rgba(0, 255, 0, 0.3);
 }
 
 .success-message h2 {
   font-size: 32px;
   margin-bottom: 15px;
+  text-shadow: 0 0 15px rgba(0, 255, 0, 0.8);
 }
 
 .success-message p {
@@ -421,9 +465,11 @@ body {
 }
 
 .error-message {
-  background: #f44336;
-  color: white;
+  background: rgba(50, 0, 0, 0.9);
+  color: #ff0000;
   padding: 15px 20px;
+  border: 2px solid rgba(255, 0, 0, 0.5);
+  box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
   border-radius: 8px;
   margin-bottom: 20px;
 }

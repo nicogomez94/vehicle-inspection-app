@@ -28,7 +28,7 @@ const Step1: React.FC<Step1Props> = ({ data, onNext }) => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <h2 style={{ marginBottom: '30px', color: '#333' }}>Paso 1: Datos del Vehículo</h2>
+      <h2 style={{ marginBottom: '30px', color: '#00ff00', textShadow: '0 0 10px rgba(0, 255, 0, 0.5)' }}>Paso 1: Datos del Vehículo</h2>
       
       <div className="form-group">
         <label htmlFor="ownerName">

@@ -13,10 +13,10 @@ router.post('/inspecciones', async (req: Request, res: Response) => {
     
     if (DEBUG_MODE) {
       const { photos, ...dataWithoutPhotos } = req.body;
-      console.log('📋 Datos recibidos:', {
-        ...dataWithoutPhotos,
-        photos: photos ? `[${photos.length} fotos]` : '[]'
-      });
+      // console.log('📋 Datos recibidos:', {
+      //   ...dataWithoutPhotos,
+      //   photos: photos ? `[${photos.length} fotos]` : '[]'
+      // });
     }
     
     const { ownerName, brandModel, plate, notes, photos, signature, createdAt }: Inspeccion = req.body;

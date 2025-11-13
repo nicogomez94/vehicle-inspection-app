@@ -15,6 +15,8 @@ const Step3: React.FC<Step3Props> = ({ data, onFinish, onBack, isSubmitting }) =
   const [hasSignature, setHasSignature] = useState(!!data.signature);
   const [showModal, setShowModal] = useState(false);
 
+  const [tempSignature, setTempSignature] = useState<string>('');
+
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -26,15 +28,16 @@ const Step3: React.FC<Step3Props> = ({ data, onFinish, onBack, isSubmitting }) =
     canvas.width = canvas.offsetWidth;
     canvas.height = canvas.offsetHeight;
 
-    // Load existing signature if any
-    if (data.signature) {
+    // Load existing signature if any (prefer tempSignature over data.signature)
+    const signatureToLoad = tempSignature || data.signature;
+    if (signatureToLoad) {
       const img = new Image();
       img.onload = () => {
         ctx.drawImage(img, 0, 0);
       };
-      img.src = data.signature;
+      img.src = signatureToLoad;
     }
-  }, [data.signature, showModal]);
+  }, [data.signature, tempSignature, showModal]);
 
   useEffect(() => {
     // Prevent body scroll when modal is open
@@ -107,20 +110,27 @@ const Step3: React.FC<Step3Props> = ({ data, onFinish, onBack, isSubmitting }) =
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
+    // Use the temporary signature if available, otherwise use data.signature
+    const finalSignature = tempSignature || data.signature;
+    if (!finalSignature) return;
+    
+    onFinish({ signature: finalSignature });
+  };
+
+  const saveSignatureTemp = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
     const signatureData = canvas.toDataURL('image/png');
-    onFinish({ signature: signatureData });
-  };
-
-  const saveSignature = () => {
+    setTempSignature(signatureData);
     setShowModal(false);
   };
 
+  const currentSignature = tempSignature || data.signature;
+
   return (
     <form onSubmit={handleSubmit}>
-      <h2 style={{ marginBottom: '30px', color: '#333' }}>Paso 3: Firma del Cliente</h2>
+      <h2 style={{ marginBottom: '30px', color: '#00ff00', textShadow: '0 0 10px rgba(0, 255, 0, 0.5)' }}>Paso 3: Firma del Cliente</h2>
       
       <div className="signature-pad-container">
         <label>
@@ -133,7 +143,7 @@ const Step3: React.FC<Step3Props> = ({ data, onFinish, onBack, isSubmitting }) =
         
         {hasSignature && (
           <div className="signature-preview" onClick={() => setShowModal(true)}>
-            <img src={data.signature} alt="Firma" />
+            <img src={currentSignature} alt="Firma" />
           </div>
         )}
         
@@ -180,7 +190,7 @@ const Step3: React.FC<Step3Props> = ({ data, onFinish, onBack, isSubmitting }) =
               <button 
                 type="button" 
                 className="btn btn-success" 
-                onClick={saveSignature}
+                onClick={saveSignatureTemp}
                 disabled={!hasSignature}
               >
                 Guardar Firma

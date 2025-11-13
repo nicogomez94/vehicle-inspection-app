@@ -41,7 +41,7 @@ const Step2: React.FC<Step2Props> = ({ data, onNext, onBack }) => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <h2 style={{ marginBottom: '30px', color: '#333' }}>Paso 2: Fotos y Observaciones</h2>
+      <h2 style={{ marginBottom: '30px', color: '#00ff00', textShadow: '0 0 10px rgba(0, 255, 0, 0.5)' }}>Paso 2: Fotos y Observaciones</h2>
       
       <div className="photo-upload">
         <label>
