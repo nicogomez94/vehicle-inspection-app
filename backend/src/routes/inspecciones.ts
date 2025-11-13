@@ -116,4 +116,87 @@ router.get('/inspecciones/:id', async (req: Request, res: Response) => {
   }
 });
 
+// GET /api/inspecciones - Get all inspections with filtering and sorting
+router.get('/inspecciones', async (req: Request, res: Response) => {
+  const DEBUG_MODE = process.env.DEBUG_MODE === 'true';
+  
+  try {
+    const { 
+      search = '', 
+      sortBy = 'created_at', 
+      sortOrder = 'DESC',
+      page = '1',
+      limit = '10'
+    } = req.query;
+
+    if (DEBUG_MODE) console.log('🔍 Solicitud GET para listar inspecciones:', { search, sortBy, sortOrder, page, limit });
+
+    // Validate sortBy to prevent SQL injection
+    const validSortColumns = ['id', 'owner_name', 'brand_model', 'plate', 'created_at'];
+    const sortColumn = validSortColumns.includes(sortBy as string) ? sortBy : 'created_at';
+    const order = sortOrder === 'ASC' ? 'ASC' : 'DESC';
+
+    // Calculate pagination
+    const pageNum = Math.max(1, parseInt(page as string) || 1);
+    const limitNum = Math.min(100, Math.max(1, parseInt(limit as string) || 10));
+    const offset = (pageNum - 1) * limitNum;
+
+    // Build query with search filter
+    let query = `
+      SELECT * FROM inspecciones
+      WHERE (
+        LOWER(owner_name) LIKE LOWER($1) OR
+        LOWER(brand_model) LIKE LOWER($1) OR
+        LOWER(plate) LIKE LOWER($1) OR
+        LOWER(notes) LIKE LOWER($1)
+      )
+      ORDER BY ${sortColumn} ${order}
+      LIMIT $2 OFFSET $3
+    `;
+
+    const searchPattern = `%${search}%`;
+    const result = await pool.query<InspeccionDB>(query, [searchPattern, limitNum, offset]);
+
+    // Get total count for pagination
+    const countQuery = `
+      SELECT COUNT(*) FROM inspecciones
+      WHERE (
+        LOWER(owner_name) LIKE LOWER($1) OR
+        LOWER(brand_model) LIKE LOWER($1) OR
+        LOWER(plate) LIKE LOWER($1) OR
+        LOWER(notes) LIKE LOWER($1)
+      )
+    `;
+    const countResult = await pool.query(countQuery, [searchPattern]);
+    const totalCount = parseInt(countResult.rows[0].count);
+
+    // Convert results
+    const inspecciones = result.rows.map(row => ({
+      id: row.id,
+      ownerName: row.owner_name,
+      brandModel: row.brand_model,
+      plate: row.plate,
+      notes: row.notes,
+      photos: row.photos,
+      signature: row.signature,
+      createdAt: row.created_at.toISOString()
+    }));
+
+    if (DEBUG_MODE) console.log(`✅ Se encontraron ${inspecciones.length} inspecciones de ${totalCount} totales`);
+
+    res.json({
+      data: inspecciones,
+      pagination: {
+        page: pageNum,
+        limit: limitNum,
+        total: totalCount,
+        totalPages: Math.ceil(totalCount / limitNum)
+      }
+    });
+  } catch (error) {
+    console.error('❌ Error fetching inspections:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 export default router;
