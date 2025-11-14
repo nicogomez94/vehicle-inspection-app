@@ -12,12 +12,25 @@
       "src": "frontend/package.json",
       "use": "@vercel/static-build",
       "config": {
-        "distDir": "dist"
+        "distDir": "frontend/dist"
       }
     }
   ],
   "routes": [
-    { "src": "/api/(.*)", "dest": "/backend/api/index.ts" },
-    { "src": "/(.*)", "dest": "/frontend/dist/$1" }
+    { 
+      "src": "/api/(.*)", 
+      "dest": "/backend/api/index.ts",
+      "headers": {
+        "Cache-Control": "no-cache"
+      }
+    },
+    { 
+      "src": "/(.*\\..+)", 
+      "dest": "/frontend/dist/$1" 
+    },
+    { 
+      "src": "/(.*)", 
+      "dest": "/frontend/dist/index.html" 
+    }
   ]
 }
