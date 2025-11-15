@@ -15,20 +15,35 @@ interface FormData {
   signature: string;
 }
 
+// Check if debug mode is enabled
+const isDebugMode = import.meta.env.VITE_DEBUG === 'true';
+
+// Debug data for testing
+const debugData: FormData = {
+  ownerName: 'Juan Pérez',
+  brandModel: 'Toyota Corolla 2020',
+  plate: 'ABC-123',
+  notes: 'Vehículo en buen estado general',
+  photos: [],
+  signature: '',
+};
+
 function App() {
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submittedId, setSubmittedId] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const [formData, setFormData] = useState<FormData>({
-    ownerName: '',
-    brandModel: '',
-    plate: '',
-    notes: '',
-    photos: [],
-    signature: '',
-  });
+  const [formData, setFormData] = useState<FormData>(
+    isDebugMode ? debugData : {
+      ownerName: '',
+      brandModel: '',
+      plate: '',
+      notes: '',
+      photos: [],
+      signature: '',
+    }
+  );
 
   const handleStep1Next = (data: { ownerName: string; brandModel: string; plate: string }) => {
     setFormData((prev) => ({ ...prev, ...data }));
