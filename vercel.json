@@ -1,0 +1,27 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "backend/api/**/*.ts",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/inspecciones/(.*)",
+      "dest": "/backend/api/inspecciones.ts"
+    },
+    {
+      "src": "/api/inspecciones",
+      "dest": "/backend/api/inspecciones.ts"
+    },
+    {
+      "src": "/api/health",
+      "dest": "/backend/api/index.ts"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/frontend/$1"
+    }
+  ]
+}

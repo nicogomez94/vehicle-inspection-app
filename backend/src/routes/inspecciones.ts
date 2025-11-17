@@ -1,11 +1,20 @@
-import { Router, Request, Response } from 'express';
 import pool from '../database/db';
 import { Inspeccion, InspeccionDB } from '../types/inspeccion';
 
-const router = Router();
+// Types for serverless handlers
+interface HandlerRequest {
+  body?: any;
+  query?: any;
+  params?: any;
+}
+
+interface HandlerResponse {
+  status: (code: number) => HandlerResponse;
+  json: (data: any) => void;
+}
 
 // POST /api/inspecciones - Create new inspection
-router.post('/inspecciones', async (req: Request, res: Response) => {
+export async function handlePost(req: HandlerRequest, res: HandlerResponse) {
   const DEBUG_MODE = process.env.DEBUG_MODE === 'true';
   
   try {
@@ -71,10 +80,10 @@ router.post('/inspecciones', async (req: Request, res: Response) => {
     console.error('❌ Error creating inspection:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
-});
+}
 
 // GET /api/inspecciones/:id - Get inspection by ID
-router.get('/inspecciones/:id', async (req: Request, res: Response) => {
+export async function handleGetById(req: HandlerRequest, res: HandlerResponse) {
   const DEBUG_MODE = process.env.DEBUG_MODE === 'true';
   
   try {
@@ -114,10 +123,10 @@ router.get('/inspecciones/:id', async (req: Request, res: Response) => {
     console.error('Error fetching inspection:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
-});
+}
 
 // GET /api/inspecciones - Get all inspections with filtering and sorting
-router.get('/inspecciones', async (req: Request, res: Response) => {
+export async function handleGetAll(req: HandlerRequest, res: HandlerResponse) {
   const DEBUG_MODE = process.env.DEBUG_MODE === 'true';
   
   try {
@@ -197,6 +206,4 @@ router.get('/inspecciones', async (req: Request, res: Response) => {
     console.error('❌ Error fetching inspections:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
-});
-
-export default router;
+}
