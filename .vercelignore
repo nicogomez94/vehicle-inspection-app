@@ -1,7 +1,0 @@
-node_modules
-.env
-*.log
-.git
-.vscode
-backend/dist
-frontend/node_modules
