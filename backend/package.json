@@ -5,7 +5,8 @@
   "main": "dist/index.js",
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "build": "tsc",
+    "build": "tsc && npm run postbuild",
+    "postbuild": "echo Build completed",
     "start": "node dist/index.js"
   },
   "keywords": [],

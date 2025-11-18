@@ -1,0 +1,23 @@
+services:
+  # Backend API
+  - type: web
+    name: vehicle-inspection-backend
+    runtime: node
+    rootDir: backend
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: vehicle-inspection-db
+          property: connectionString
+    
+  # PostgreSQL Database
+  - type: pserv
+    name: vehicle-inspection-db
+    region: oregon
+    plan: free
+    databaseName: vehicle_inspection
+    databaseUser: vehicle_inspection_user
