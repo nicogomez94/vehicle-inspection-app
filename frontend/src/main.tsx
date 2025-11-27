@@ -15,6 +15,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
             <div style={{ 
               position: 'fixed', 
               top: '20px', 
+              display: 'none',
               left: '20px', 
               zIndex: 1000 
             }}>
