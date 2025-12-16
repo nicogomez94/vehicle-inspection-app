@@ -7,11 +7,33 @@ interface Step2Props {
   };
   onNext: (data: { photos: string[]; notes: string }) => void;
   onBack: () => void;
+  autoFill?: boolean;
 }
 
-const Step2: React.FC<Step2Props> = ({ data, onNext, onBack }) => {
+const Step2: React.FC<Step2Props> = ({ data, onNext, onBack, autoFill = false }) => {
   const [photos, setPhotos] = useState<string[]>(data.photos);
   const [notes, setNotes] = useState(data.notes);
+
+  // Auto-fill effect - add placeholder image and notes
+  useState(() => {
+    if (autoFill && photos.length === 0) {
+      // Crear una imagen placeholder simple
+      const canvas = document.createElement('canvas');
+      canvas.width = 400;
+      canvas.height = 300;
+      const ctx = canvas.getContext('2d');
+      if (ctx) {
+        ctx.fillStyle = '#e0e0e0';
+        ctx.fillRect(0, 0, 400, 300);
+        ctx.fillStyle = '#666';
+        ctx.font = '20px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('Foto de prueba', 200, 150);
+        setPhotos([canvas.toDataURL('image/png')]);
+      }
+      setNotes('Vehículo en buen estado general. Sin daños visibles.');
+    }
+  });
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;

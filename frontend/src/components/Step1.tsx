@@ -7,10 +7,22 @@ interface Step1Props {
     plate: string;
   };
   onNext: (data: { ownerName: string; brandModel: string; plate: string }) => void;
+  autoFill?: boolean;
 }
 
-const Step1: React.FC<Step1Props> = ({ data, onNext }) => {
+const Step1: React.FC<Step1Props> = ({ data, onNext, autoFill = false }) => {
   const [formData, setFormData] = useState(data);
+
+  // Auto-fill effect
+  useState(() => {
+    if (autoFill && !formData.ownerName) {
+      setFormData({
+        ownerName: 'Juan Pérez García',
+        brandModel: 'Toyota Corolla 2022',
+        plate: 'ABC-1234',
+      });
+    }
+  });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({

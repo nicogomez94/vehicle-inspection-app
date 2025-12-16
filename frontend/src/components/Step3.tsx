@@ -7,15 +7,38 @@ interface Step3Props {
   onFinish: (data: { signature: string }) => void;
   onBack: () => void;
   isSubmitting: boolean;
+  autoFill?: boolean;
 }
 
-const Step3: React.FC<Step3Props> = ({ data, onFinish, onBack, isSubmitting }) => {
+const Step3: React.FC<Step3Props> = ({ data, onFinish, onBack, isSubmitting, autoFill = false }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isDrawing, setIsDrawing] = useState(false);
   const [hasSignature, setHasSignature] = useState(!!data.signature);
   const [showModal, setShowModal] = useState(false);
 
   const [tempSignature, setTempSignature] = useState<string>('');
+
+  // Auto-fill signature
+  useState(() => {
+    if (autoFill && !tempSignature && !data.signature) {
+      // Crear una firma placeholder
+      const canvas = document.createElement('canvas');
+      canvas.width = 400;
+      canvas.height = 150;
+      const ctx = canvas.getContext('2d');
+      if (ctx) {
+        ctx.fillStyle = 'white';
+        ctx.fillRect(0, 0, 400, 150);
+        ctx.strokeStyle = '#000';
+        ctx.lineWidth = 2;
+        ctx.font = 'italic 30px cursive';
+        ctx.fillStyle = '#000';
+        ctx.fillText('Juan Pérez', 100, 80);
+        setTempSignature(canvas.toDataURL('image/png'));
+        setHasSignature(true);
+      }
+    }
+  });
 
   useEffect(() => {
     const canvas = canvasRef.current;

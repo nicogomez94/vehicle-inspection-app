@@ -20,6 +20,7 @@ function App() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submittedId, setSubmittedId] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [autoFill, setAutoFill] = useState(false);
 
   const [formData, setFormData] = useState<FormData>({
     ownerName: '',
@@ -82,7 +83,26 @@ function App() {
   return (
     <div className="wizard-container">
       <div className="wizard-header">
-        <h1>Registro de Inspección de Vehículo</h1>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+          <h1>Registro de Inspección de Vehículo</h1>
+          <button
+            onClick={() => setAutoFill(!autoFill)}
+            style={{
+              padding: '8px 16px',
+              borderRadius: '20px',
+              border: 'none',
+              cursor: 'pointer',
+              fontWeight: 'bold',
+              fontSize: '14px',
+              transition: 'all 0.3s',
+              backgroundColor: autoFill ? '#4CAF50' : '#ccc',
+              color: autoFill ? 'white' : '#666',
+            }}
+            title="Activar para auto-rellenar campos de prueba"
+          >
+            {autoFill ? '✓ Auto-Fill ON' : 'Auto-Fill OFF'}
+          </button>
+        </div>
         <div className="step-indicator">
           <div className={`step ${currentStep >= 1 ? 'active' : ''} ${currentStep > 1 ? 'completed' : ''}`}></div>
           <div className={`step ${currentStep >= 2 ? 'active' : ''} ${currentStep > 2 ? 'completed' : ''}`}></div>
@@ -105,6 +125,7 @@ function App() {
               plate: formData.plate,
             }}
             onNext={handleStep1Next}
+            autoFill={autoFill}
           />
         )}
 
@@ -116,6 +137,7 @@ function App() {
             }}
             onNext={handleStep2Next}
             onBack={handleBack}
+            autoFill={autoFill}
           />
         )}
 
@@ -127,6 +149,7 @@ function App() {
             onFinish={handleStep3Finish}
             onBack={handleBack}
             isSubmitting={isSubmitting}
+            autoFill={autoFill}
           />
         )}
       </div>
