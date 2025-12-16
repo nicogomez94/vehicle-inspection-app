@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { inspeccionesApi, GetAllParams } from '../api/inspecciones';
-import { InspeccionResponse } from '../types/inspeccion';
+import { InspeccionResponse, InspeccionListItem } from '../types/inspeccion';
 import '../styles/Admin.css';
 
 const Admin: React.FC = () => {
-  const [inspecciones, setInspecciones] = useState<InspeccionResponse[]>([]);
+  const [inspecciones, setInspecciones] = useState<InspeccionListItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   
@@ -17,6 +17,7 @@ const Admin: React.FC = () => {
   const limit = 10;
 
   const [selectedInspection, setSelectedInspection] = useState<InspeccionResponse | null>(null);
+  const [loadingDetails, setLoadingDetails] = useState(false);
 
   useEffect(() => {
     fetchInspecciones();
@@ -61,8 +62,17 @@ const Admin: React.FC = () => {
     setPage(1);
   };
 
-  const handleViewDetails = (inspeccion: InspeccionResponse) => {
-    setSelectedInspection(inspeccion);
+  const handleViewDetails = async (inspeccion: InspeccionListItem) => {
+    setLoadingDetails(true);
+    try {
+      // Cargar detalles completos solo cuando se hace clic
+      const fullDetails = await inspeccionesApi.getById(inspeccion.id);
+      setSelectedInspection(fullDetails);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Error al cargar detalles');
+    } finally {
+      setLoadingDetails(false);
+    }
   };
 
   const closeModal = () => {
@@ -135,13 +145,14 @@ const Admin: React.FC = () => {
                       <td>{inspeccion.brandModel}</td>
                       <td>{inspeccion.plate}</td>
                       <td>{new Date(inspeccion.createdAt).toLocaleString('es-ES')}</td>
-                      <td>{inspeccion.photos.length}</td>
+                      <td>{inspeccion.photoCount}</td>
                       <td>
                         <button 
                           className="btn-view"
                           onClick={() => handleViewDetails(inspeccion)}
+                          disabled={loadingDetails}
                         >
-                          Ver Detalles
+                          {loadingDetails ? 'Cargando...' : 'Ver Detalles'}
                         </button>
                       </td>
                     </tr>

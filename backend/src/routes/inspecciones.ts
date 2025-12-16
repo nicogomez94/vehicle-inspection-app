@@ -116,7 +116,7 @@ router.get('/inspecciones/:id', async (req: Request, res: Response) => {
   }
 });
 
-// GET /api/inspecciones - Get all inspections with filtering and sorting
+// GET /api/inspecciones - Get all inspections with filtering and sorting (lightweight - without photos)
 router.get('/inspecciones', async (req: Request, res: Response) => {
   const DEBUG_MODE = process.env.DEBUG_MODE === 'true';
   
@@ -141,9 +141,17 @@ router.get('/inspecciones', async (req: Request, res: Response) => {
     const limitNum = Math.min(100, Math.max(1, parseInt(limit as string) || 10));
     const offset = (pageNum - 1) * limitNum;
 
-    // Build query with search filter
+    // Build query with search filter - EXCLUDE photos for performance
     let query = `
-      SELECT * FROM inspecciones
+      SELECT 
+        id, 
+        owner_name, 
+        brand_model, 
+        plate, 
+        notes, 
+        array_length(photos, 1) as photo_count,
+        created_at
+      FROM inspecciones
       WHERE (
         LOWER(owner_name) LIKE LOWER($1) OR
         LOWER(brand_model) LIKE LOWER($1) OR
@@ -155,9 +163,9 @@ router.get('/inspecciones', async (req: Request, res: Response) => {
     `;
 
     const searchPattern = `%${search}%`;
-    const result = await pool.query<InspeccionDB>(query, [searchPattern, limitNum, offset]);
+    const result = await pool.query(query, [searchPattern, limitNum, offset]);
 
-    // Get total count for pagination
+    // Get total count for pagination - use a more efficient query
     const countQuery = `
       SELECT COUNT(*) FROM inspecciones
       WHERE (
@@ -170,15 +178,14 @@ router.get('/inspecciones', async (req: Request, res: Response) => {
     const countResult = await pool.query(countQuery, [searchPattern]);
     const totalCount = parseInt(countResult.rows[0].count);
 
-    // Convert results
+    // Convert results - lightweight version without photos
     const inspecciones = result.rows.map(row => ({
       id: row.id,
       ownerName: row.owner_name,
       brandModel: row.brand_model,
       plate: row.plate,
       notes: row.notes,
-      photos: row.photos,
-      signature: row.signature,
+      photoCount: row.photo_count || 0,
       createdAt: row.created_at.toISOString()
     }));
 

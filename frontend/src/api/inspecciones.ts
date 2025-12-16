@@ -1,4 +1,4 @@
-import { InspeccionData, InspeccionResponse } from '../types/inspeccion';
+import { InspeccionData, InspeccionResponse, InspeccionListItem } from '../types/inspeccion';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
 
@@ -11,7 +11,7 @@ export interface GetAllParams {
 }
 
 export interface GetAllResponse {
-  data: InspeccionResponse[];
+  data: InspeccionListItem[];
   pagination: {
     page: number;
     limit: number;
